@@ -1,154 +1,148 @@
-# Damn Vulnerable GraphQL Application
-Damn Vulnerable GraphQL Application is an intentionally vulnerable implementation of Facebook's GraphQL technology, to learn and practice GraphQL Security.
+# GraphQL Authorization using Open Policy Agent
+GraphQL Demo application demonstrating field-level Authorization with Open Policy Agent
 
+# Setup
+## Clone repository
+`git clone https://github.com/dolevf/graphql-open-policy-agent.git && cd graphql-open-policy-agent`
 
-<p align="center">
-  <img src="https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application/blob/master/static/images/dvgql_logo.png?raw=true" width="300px" alt="DVGA"/>
-</p>
+## Download OPA binary for your CPU architecture
+https://www.openpolicyagent.org/docs/latest/#1-download-opa
 
-# Table of Contents
-* [About DVGA](#about)
-* [Operation Modes](#operation-modes)
-* [Scenarios](#scenarios)
-* [Prerequisites](#prerequisites)
-* [Installation](#installation)
-  * [Installation - Docker](#docker)
-  * [Installation - Docker Registry](#docker-registry)
-  * [Installation - Server](#server)
-* [Screenshots](#screenshots)
-* [Maintainers](#maintainers)
-* [Contributors](#contributors)
-* [Mentions](#mentions)
-* [Disclaimer](#disclaimer)
-* [License](#license)
-
-# About DVGA
-Damn Vulnerable GraphQL is a deliberately weak and insecure implementation of GraphQL that provides a safe environment to attack a GraphQL application, allowing developers and IT professionals to test for vulnerabilities.
-
-DVGA has numerous flaws, such as Injections, Code Executions, Bypasses, Denial of Service, and more. See the full list under the [Scenarios](#scenarios) section.
-
-# Operation Modes
-DVGA supports Beginner and Expert level game modes, which will change the exploitation difficulty.
-
-# Scenarios
-* **Reconnaissance**
-  * Discovering GraphQL
-  * Fingerprinting GraphQL
-* **Denial of Service**
-  * Batch Query Attack
-  * Deep Recursion Query Attack
-  * Resource Intensive Query Attack
-  * Field Duplication Attack
-  * Aliases based Attack
-* **Information Disclosure**
-  * GraphQL Introspection
-  * GraphiQL Interface
-  * GraphQL Field Suggestions
-  * Server Side Request Forgery
-* **Code Execution**
-  * OS Command Injection #1
-  * OS Command Injection #2
-* **Injection**
-  * Stored Cross Site Scripting
-  * Log spoofing / Log Injection
-  * HTML Injection
-* **Authorization Bypass**
-  * GraphQL Interface Protection Bypass
-  * GraphQL Query Deny List Bypass
-* **Miscellaneous**
-  * GraphQL Query Weak Password Protection
-  * Arbitrary File Write // Path Traversal
-
-# Prerequisites
-The following Python3 libraries are required:
-* Python3 (3.6+)
-* Flask
-* Flask-SQLAlchemy
-* Graphene
-* Graphene-SQLAlchemy
-
-See [requirements.txt](requirements.txt) for dependencies.
-
-
-# Installation
-
-## Docker
-### Clone the repository
-`git clone git@github.com:dolevf/Damn-Vulnerable-GraphQL-Application.git && cd Damn-Vulnerable-GraphQL-Application`
-
-### Build the Docker image
-`docker build -t dvga .`
-
-### Create a container from the image
-`docker run -t -p 5013:5013 -e WEB_HOST=0.0.0.0 dvga`
-
-In your browser, navigate to http://localhost:5013
-
-Note: if you need the application to bind on a specific port (e.g. 8080), use **-e WEB_PORT=8080**.
-
-## Docker Registry
-### Pull the docker image from Docker Hub
-`docker pull dolevf/dvga`
-
-### Create a container from the image
-`docker run -t -p 5013:5013 -e WEB_HOST=0.0.0.0 dolevf/dvga`
-
-In your browser, navigate to http://localhost:5013
-
-## Server
-### Navigate to /opt
-`cd /opt/`
-
-### Clone the repository
-`git clone git@github.com:dolevf/Damn-Vulnerable-GraphQL-Application.git && cd Damn-Vulnerable-GraphQL-Application`
-
-### Install Requirements
+## Install Python prerequisites
 `pip3 install -r requirements.txt`
 
-### Run application
+## Run GraphQL Web Application
+This should run on localhost:5013.
 `python3 app.py`
 
-In your browser, navigate to http://localhost:5013.
+## Run OPA Server with the GraphQL Policy
+This should run on localhost:8181.
+`./opa run --server policy.rego`
 
-# Screenshots
-![DVGA](https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application/blob/master/static/screenshots/index.png)
-![DVGA](https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application/blob/master/static/screenshots/solution.png)
-![DVGA](https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application/blob/master/static/screenshots/pastes.png)
-![DVGA](https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application/blob/master/static/screenshots/create.png)
 
-# Maintainers
-* [Dolev Farhi](https://github.com/dolevf)
-* [Connor McKinnon](https://github.com/connormckinnon93)
+# OPA Policy
+```
+package graphql
 
-# Contributors
-A big Thank You to the kind people who helped make DVGA better:
- * [Halfluke](https://github.com/halfluke)
+default allow = false
 
-# Mentions
-* [OWASP Vulnerable Web Applications Directory](https://owasp.org/www-project-vulnerable-web-applications-directory/)
-* [GraphQL Weekly](https://www.graphqlweekly.com/issues/221/#content)
-* [DZone API Security Weekly](https://dzone.com/articles/api-security-weekly-issue-121)
-* [KitPloit](https://www.kitploit.com/2021/02/damn-vulnerable-graphql-application.html)
-* [tl;dr sec #72](https://tldrsec.com/blog/tldr-sec-072/)
-* [Intigriti Blog](https://blog.intigriti.com/2021/02/17/bug-bytes-110-scope-based-recon-finding-more-idors-how-to-hack-sharepoint/)
-* [STÖK - Bounty Thursdays #26](https://www.youtube.com/watch?v=645Tb7ySQFk)
-* [Brakeing Security 2021-007](https://brakeingsecurity.com/2021-007-news-google-asking-for-oss-to-embrace-standards-insider-threat-at-yandex-vectr-discussion)
-* [Yes We Hack - How to Exploit GraphQL](https://blog.yeswehack.com/yeswerhackers/how-exploit-graphql-endpoint-bug-bounty/)
-* [GraphQL Editor](https://blog.graphqleditor.com/dvga)
-* [GraphQL Hacking (Portuguese)](https://www.youtube.com/watch?v=4gXOerUZ7fw)
-* [InQL GraphQL Scanner Demo](https://www.youtube.com/watch?v=KOCBeJmTs78)
-* [H4ck3d - Security Conference 2021 (Spanish)](https://youtu.be/hg_kVoy-W1s)
-* [Christina Hasternath - GraphQLConf 2021](https://www.youtube.com/watch?v=tPO1jl0tCKg)
-* [Hacking APIs (Ch14) by Corey Ball - No Starch Press](https://nostarch.com/hacking-apis)
-* [Hacking Simplified Part #1](https://www.youtube.com/watch?v=w0QOAacuPgQ)
-* [Hacking Simplified Part #2](https://www.youtube.com/watch?v=YA-mL9Z8SNI)
+privileged_fields := {"price", "discount_code"}
 
-                                                                                                                                              
-# Disclaimer
-DVGA is highly insecure, and as such, should not be deployed on internet facing servers. By default, the application is listening on 127.0.0.1 to avoid misconfigurations.
+allow {
+	input.user == "admin"
+	field_allowed
+}
 
-DVGA is intentionally flawed and vulnerable, as such, it comes with no warranties. By using DVGA, you take full responsibility for using it.
+field_allowed {
+  privileged_fields[input.field]
+}
+```
 
-# License
-It is distributed under the MIT License. See LICENSE for more information.
+# Try it out!
+Without authorization, price and discountcode fields are NULL.
 
+```
+$ curl -X POST \
+  --header 'Content-Type: application/json' \
+  --header 'user: admin' \
+  --data '{"query": "query { cars { id tier price maker discountcode model } }"}' \
+  http://localhost:5013/graphql | jq
+
+
+{
+  "data": {
+    "cars": [
+      {
+        "id": "5",
+        "tier": "Premium",
+        "price": null,
+        "maker": "Mercedes-Benz",
+        "discountcode": null,
+        "model": "AMG F1"
+      },
+      {
+        "id": "4",
+        "tier": "Basic",
+        "price": null,
+        "maker": "Honda",
+        "discountcode": null,
+        "model": "Civic"
+      },
+      {
+        "id": "3",
+        "tier": "Basic",
+        "price": null,
+        "maker": "Hyundai",
+        "discountcode": null,
+        "model": "Accord"
+      },
+      {
+        "id": "2",
+        "tier": "Premium",
+        "price": null,
+        "maker": "Audi",
+        "discountcode": null,
+        "model": "R8"
+      },
+      {
+        "id": "1",
+        "tier": "Premium",
+        "price": null,
+        "maker": "Tesla",
+        "discountcode": null,
+        "model": "3"
+      }
+    ]
+  }
+}
+```
+
+With authorization (user header is specified), price and discountcode fields are returned.
+```
+{
+  "data": {
+    "cars": [
+      {
+        "id": "5",
+        "tier": "Premium",
+        "price": 40000,
+        "maker": "Mercedes-Benz",
+        "discountcode": "526df5db-f1ae-42cf-bcb0-d0fb1c16ca79",
+        "model": "AMG F1"
+      },
+      {
+        "id": "4",
+        "tier": "Basic",
+        "price": 15000,
+        "maker": "Honda",
+        "discountcode": "e05b5d2f-6929-47fc-89fa-d1faff0a4ae9",
+        "model": "Civic"
+      },
+      {
+        "id": "3",
+        "tier": "Basic",
+        "price": 12000,
+        "maker": "Hyundai",
+        "discountcode": "4b0a189f-dd01-4d8d-80c9-cd8505d03b20",
+        "model": "Accord"
+      },
+      {
+        "id": "2",
+        "tier": "Premium",
+        "price": 350000,
+        "maker": "Audi",
+        "discountcode": "7efc4a62-2920-4b08-97ce-94676a3e5b85",
+        "model": "R8"
+      },
+      {
+        "id": "1",
+        "tier": "Premium",
+        "price": 30000,
+        "maker": "Tesla",
+        "discountcode": "2386c295-9a6f-4376-bd94-aa1337545463",
+        "model": "3"
+      }
+    ]
+  }
+}
+```
